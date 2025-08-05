@@ -18,7 +18,7 @@ This Terraform module provides easy access to [Bref](https://bref.sh/) Lambda la
 
 ```hcl
 module "bref_layers" {
-  source = "./terraform-bref-layer"
+  source = "psantus/terraform-null-bref-layer"
   
   aws_region = "us-east-1"
 }
@@ -40,7 +40,7 @@ resource "aws_lambda_function" "example" {
 
 ```hcl
 module "bref_layers" {
-  source = "./terraform-bref-layer"
+  source = "psantus/terraform-null-bref-layer"
   
   php_version = "83"
   cpu_type    = "arm64"
@@ -65,7 +65,7 @@ resource "aws_lambda_function" "api" {
 
 ```hcl
 module "bref_layers" {
-  source = "./terraform-bref-layer"
+  source = "psantus/terraform-null-bref-layer"
   
   php_version = "82"
   cpu_type    = "x86"
@@ -95,7 +95,7 @@ resource "aws_lambda_function" "console" {
 
 ```hcl
 module "bref_layers" {
-  source = "./terraform-bref-layer"
+  source = "psantus/terraform-null-bref-layer"
   
   php_version = "84"
   cpu_type    = "x86"
