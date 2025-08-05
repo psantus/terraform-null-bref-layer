@@ -2,13 +2,6 @@ variable "php_version" {
   description = "PHP version for the Bref layers"
   type        = string
   default     = "84"
-  
-  validation {
-    condition = contains([
-      "80", "81", "82", "83", "84"
-    ], var.php_version)
-    error_message = "PHP version must be one of: 80, 81, 82, 83, 84."
-  }
 }
 
 variable "cpu_type" {

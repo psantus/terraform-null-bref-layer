@@ -6,7 +6,7 @@ This Terraform module provides easy access to [Bref](https://bref.sh/) Lambda la
 
 - **Dynamic Layer Fetching**: Automatically retrieves the latest layer versions from Bref's GitHub repository
 - **Multi-Architecture Support**: Supports both x86 and ARM64 architectures
-- **Multiple PHP Versions**: Supports PHP 8.0, 8.1, 8.2, 8.3, and 8.4
+- **Multiple PHP Versions**: Supports any PHP version that Bref supports
 - **Three Runtime Types**: Provides ARNs for function, FPM, and console runtimes
 - **PHP Extensions Support**: Supports up to 9 PHP extensions from Bref's extra extensions
 - **Region Aware**: Automatically detects the current AWS region or accepts a custom region
@@ -126,11 +126,13 @@ resource "aws_lambda_function" "app_with_extensions" {
 | php_extensions | List of PHP extensions to include (maximum 9) | `list(string)` | `[]` | no |
 
 ### PHP Version Values
+The module accepts any PHP version that Bref supports. Common values include:
 - `"80"` - PHP 8.0
 - `"81"` - PHP 8.1
 - `"82"` - PHP 8.2
 - `"83"` - PHP 8.3
 - `"84"` - PHP 8.4 (default)
+- And any future PHP versions that Bref adds support for
 
 ### CPU Type Values
 - `"x86"` - x86_64 architecture (default)
