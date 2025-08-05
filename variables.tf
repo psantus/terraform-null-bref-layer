@@ -26,3 +26,21 @@ variable "aws_region" {
   description = "AWS region where the layers will be used"
   type        = string
 }
+
+variable "php_extensions" {
+  description = "List of PHP extensions to include (maximum 9 extensions)"
+  type        = list(string)
+  default     = []
+  
+  validation {
+    condition     = length(var.php_extensions) <= 9
+    error_message = "Maximum 9 PHP extensions are allowed."
+  }
+  
+  validation {
+    condition = alltrue([
+      for ext in var.php_extensions : can(regex("^[a-z0-9_-]+$", ext))
+    ])
+    error_message = "PHP extension names must contain only lowercase letters, numbers, underscores, and hyphens."
+  }
+}

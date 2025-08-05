@@ -8,7 +8,9 @@ This Terraform module provides easy access to [Bref](https://bref.sh/) Lambda la
 - **Multi-Architecture Support**: Supports both x86 and ARM64 architectures
 - **Multiple PHP Versions**: Supports PHP 8.0, 8.1, 8.2, 8.3, and 8.4
 - **Three Runtime Types**: Provides ARNs for function, FPM, and console runtimes
+- **PHP Extensions Support**: Supports up to 9 PHP extensions from Bref's extra extensions
 - **Region Aware**: Automatically detects the current AWS region or accepts a custom region
+- **Combined Layer Arrays**: Provides ready-to-use arrays combining runtime and extension layers
 
 ## Usage
 
@@ -89,6 +91,31 @@ resource "aws_lambda_function" "console" {
 }
 ```
 
+### With PHP Extensions
+
+```hcl
+module "bref_layers" {
+  source = "./terraform-bref-layer"
+  
+  php_version = "84"
+  cpu_type    = "x86"
+  aws_region  = "us-east-1"
+  php_extensions = ["gd", "imagick", "redis"]
+}
+
+# Lambda function with runtime and extension layers
+resource "aws_lambda_function" "app_with_extensions" {
+  filename         = "app.zip"
+  function_name    = "app-with-extensions"
+  role            = aws_iam_role.lambda_role.arn
+  handler         = "public/index.php"
+  runtime         = "provided.al2"
+  
+  # Use the combined layers array that includes runtime + extensions
+  layers = module.bref_layers.fpm_layers
+}
+```
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -96,6 +123,7 @@ resource "aws_lambda_function" "console" {
 | php_version | PHP version for the Bref layers | `string` | `"84"` | no |
 | cpu_type | CPU architecture type (x86 or arm64) | `string` | `"x86"` | no |
 | aws_region | AWS region where the layers will be used | `string` | n/a | yes |
+| php_extensions | List of PHP extensions to include (maximum 9) | `list(string)` | `[]` | no |
 
 ### PHP Version Values
 - `"80"` - PHP 8.0
@@ -115,9 +143,14 @@ resource "aws_lambda_function" "console" {
 | function_layer_arn | ARN of the Bref PHP function runtime layer |
 | fpm_layer_arn | ARN of the Bref PHP-FPM runtime layer |
 | console_layer_arn | ARN of the Bref console runtime layer |
+| extension_layer_arns | Map of PHP extension names to their layer ARNs |
+| function_layers | Array containing the function runtime layer ARN and all extension layer ARNs |
+| fpm_layers | Array containing the FPM runtime layer ARN and all extension layer ARNs |
+| console_layers | Array containing the console runtime layer ARN and all extension layer ARNs |
 | php_version | PHP version used for the layers |
 | cpu_type | CPU architecture type used for the layers |
 | region | AWS region where the layers are located |
+| php_extensions | List of PHP extensions included |
 | layer_versions | Version numbers of the layers |
 
 ## Layer Types Explained
@@ -162,7 +195,8 @@ echo "Running console command\n";
 ## Data Sources
 
 This module uses the HTTP data source to fetch the latest layer versions from:
-`https://raw.githubusercontent.com/brefphp/bref/master/layers.json`
+- `https://raw.githubusercontent.com/brefphp/bref/master/layers.json`
+- `https://raw.githubusercontent.com/brefphp/extra-php-extensions/master/layers.json`
 
 ## Error Handling
 
