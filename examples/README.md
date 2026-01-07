@@ -16,6 +16,11 @@ Demonstrates usage with PHP extensions:
 - PHP 8.3 with different extensions (calendar, gmp, ldap)
 - Shows how to use combined layer arrays
 
+### [v3-php85/](./v3-php85/)
+Demonstrates Bref v3 targeting:
+- PHP 8.5 with ARM64 in eu-central-1
+- Shows how to set `bref_major = 3`
+
 ## Running the Examples
 
 Navigate to any example directory and run:
