@@ -8,8 +8,8 @@ module "bref_layers_v3" {
   cpu_type    = "arm64"
   aws_region  = "eu-central-1"
 
-  # If Bref v3 uses a different catalog URL, override it here.
-  # bref_catalog_url = "https://raw.githubusercontent.com/brefphp/bref/3.x/layers.json"
+  # Override to pin a newer Bref v3 catalog if needed.
+  # bref_catalog_url = "https://raw.githubusercontent.com/brefphp/bref/3.0.0-beta2/layers.json"
 }
 
 output "v3_results" {

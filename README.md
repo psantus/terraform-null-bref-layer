@@ -130,8 +130,8 @@ module "bref_layers_v3" {
   cpu_type    = "arm64"
   aws_region  = "eu-central-1"
 
-  # If Bref v3 uses a different catalog URL, override it here.
-  # bref_catalog_url = "https://raw.githubusercontent.com/brefphp/bref/3.x/layers.json"
+  # Override to pin a newer Bref v3 catalog if needed.
+  # bref_catalog_url = "https://raw.githubusercontent.com/brefphp/bref/3.0.0-beta2/layers.json"
 }
 ```
 
@@ -149,7 +149,7 @@ module "bref_layers_v3" {
 | php_extensions | List of PHP extensions to include (maximum 9) | `list(string)` | `[]` | no |
 
 ### Bref v2 vs v3
-Bref v3 layers are published from a different AWS account. Set `bref_major = 3` to switch the account used for runtime layer ARNs. If the v3 runtime catalog URL differs from the v2 URL, override it with `bref_catalog_url`.
+Bref v3 layers are published from a different AWS account and the runtime layers are merged into a single `php-xx` layer. Set `bref_major = 3` to switch the account used for runtime layer ARNs. When using v3, `function_layer_arn`, `fpm_layer_arn`, and `console_layer_arn` will all resolve to the same layer ARN. If you use explicit layers with `provided.al2`, set `BREF_RUNTIME` in your Lambda environment (e.g., `fpm`, `function`, or `console`). Override `bref_catalog_url` if you need a newer Bref v3 catalog.
 
 ### PHP Version Values
 The module accepts any PHP version that Bref supports. Common values include:
@@ -224,7 +224,8 @@ echo "Running console command\n";
 ## Data Sources
 
 This module uses the HTTP data source to fetch the latest layer versions from:
-- `https://raw.githubusercontent.com/brefphp/bref/master/layers.json` (runtime catalog, override via `bref_catalog_url`)
+- `https://raw.githubusercontent.com/brefphp/bref/master/layers.json` (v2 runtime catalog)
+- `https://raw.githubusercontent.com/brefphp/bref/3.0.0-beta2/layers.json` (v3 runtime catalog, override via `bref_catalog_url`)
 - `https://raw.githubusercontent.com/brefphp/extra-php-extensions/master/layers.json`
 
 ## Error Handling

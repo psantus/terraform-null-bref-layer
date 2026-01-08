@@ -10,4 +10,4 @@ terraform plan
 terraform apply
 ```
 
-If Bref v3 uses a different catalog URL for runtime layers, set `bref_catalog_url` in `main.tf`.
+If you need a newer Bref v3 catalog, set `bref_catalog_url` in `main.tf`.
