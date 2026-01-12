@@ -16,6 +16,15 @@ resource "null_resource" "validate_extensions" {
   }
 }
 
+#  Extra extensions are not yet available for Bref v3 //TODO remove this when Bref v3 supports extensions
+resource "null_resource" "no_extensions_for_v3" {
+  count = (length(var.php_extensions) > 0 && var.bref_major == 3) ? 1 : 0
+
+  provisioner "local-exec" {
+    command = "echo 'ERROR: extra extensions are not yet available in Bref v3' && exit 1"
+  }
+}
+
 # Construct the layer ARNs using the Bref naming convention
 locals {
   # Bref layer ARN format: arn:aws:lambda:{region}:{account}:layer:{layer-name}:{version}

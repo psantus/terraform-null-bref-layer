@@ -9,7 +9,7 @@ data "http" "bref_layers" {
 
 # Fetch the latest Bref PHP extensions layer versions from GitHub
 data "http" "bref_extensions" {
-  url = "https://raw.githubusercontent.com/brefphp/extra-php-extensions/master/layers.json"
+  url = "https://raw.githubusercontent.com/brefphp/extra-php-extensions/refs/tags/1.8.6/layers.json"
 
   request_headers = {
     Accept = "application/json"
@@ -22,8 +22,8 @@ locals {
   bref_layer_name_prefix = var.bref_layer_name_prefix != null ? var.bref_layer_name_prefix : ""
   bref_catalog_url = var.bref_catalog_url != null ? var.bref_catalog_url : (
     local.bref_major == 3
-    ? "https://raw.githubusercontent.com/brefphp/bref/3.0.0-beta2/layers.json"
-    : "https://raw.githubusercontent.com/brefphp/bref/master/layers.json"
+    ? "https://raw.githubusercontent.com/brefphp/bref/refs/tags/3.0.0-beta2/layers.json"
+    : "https://raw.githubusercontent.com/brefphp/bref/refs/tags/2.4.16/layers.json"
   )
   php_version_normalized = replace(replace(lower(var.php_version), "php-", ""), ".", "")
 

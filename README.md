@@ -135,6 +135,9 @@ module "bref_layers_v3" {
 }
 ```
 
+[!WARNING]
+Extra extensions are not yet available for Bref v3
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -224,9 +227,9 @@ echo "Running console command\n";
 ## Data Sources
 
 This module uses the HTTP data source to fetch the latest layer versions from:
-- `https://raw.githubusercontent.com/brefphp/bref/master/layers.json` (v2 runtime catalog)
-- `https://raw.githubusercontent.com/brefphp/bref/3.0.0-beta2/layers.json` (v3 runtime catalog, override via `bref_catalog_url`)
-- `https://raw.githubusercontent.com/brefphp/extra-php-extensions/master/layers.json`
+- `https://raw.githubusercontent.com/brefphp/bref/refs/tags/2.4.16/layers.json` (v2 runtime catalog)
+- `https://raw.githubusercontent.com/brefphp/bref/refs/tags/3.0.0-beta2/layers.json` (v3 runtime catalog, override via `bref_catalog_url`)
+- `https://raw.githubusercontent.com/brefphp/extra-php-extensions/refs/tags/1.8.6/layers.json` (v2 extensions)
 
 ## Error Handling
 
