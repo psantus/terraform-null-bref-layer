@@ -7,6 +7,7 @@ This Terraform module provides easy access to [Bref](https://bref.sh/) Lambda la
 - **Dynamic Layer Fetching**: Automatically retrieves the latest layer versions from Bref's GitHub repository
 - **Multi-Architecture Support**: Supports both x86 and ARM64 architectures
 - **Multiple PHP Versions**: Supports any PHP version that Bref supports
+- **Bref v2/v3 Switch**: Target Bref v2 (default) or v3 layers via `bref_major`
 - **Three Runtime Types**: Provides ARNs for function, FPM, and console runtimes
 - **PHP Extensions Support**: Supports up to 9 PHP extensions from Bref's extra extensions
 - **Region Aware**: Automatically detects the current AWS region or accepts a custom region
@@ -116,22 +117,51 @@ resource "aws_lambda_function" "app_with_extensions" {
 }
 ```
 
+### Bref v3 (PHP 8.5)
+
+Bref v3 layers are published from a separate AWS account. Use `bref_major = 3` and a PHP 8.5 version format like `"8.5"` or `"85"`.
+
+```hcl
+module "bref_layers_v3" {
+  source = "psantus/bref-layer/null"
+
+  bref_major  = 3
+  php_version = "8.5"
+  cpu_type    = "arm64"
+  aws_region  = "eu-central-1"
+
+  # Override to pin a newer Bref v3 catalog if needed.
+  # bref_catalog_url = "https://raw.githubusercontent.com/brefphp/bref/3.0.0-beta2/layers.json"
+}
+```
+
+[!WARNING]
+Extra extensions are not yet available for Bref v3
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| bref_major | Bref major version to target (2 or 3) | `any` | `2` | no |
+| bref_layers_account_id | AWS account ID that publishes the Bref runtime layers | `string` | `null` | no |
+| bref_layer_name_prefix | Optional prefix for Bref runtime layer names | `string` | `null` | no |
+| bref_catalog_url | Optional override for the Bref runtime catalog URL | `string` | `null` | no |
 | php_version | PHP version for the Bref layers | `string` | `"84"` | no |
 | cpu_type | CPU architecture type (x86 or arm64) | `string` | `"x86"` | no |
 | aws_region | AWS region where the layers will be used | `string` | n/a | yes |
 | php_extensions | List of PHP extensions to include (maximum 9) | `list(string)` | `[]` | no |
 
+### Bref v2 vs v3
+Bref v3 layers are published from a different AWS account and the runtime layers are merged into a single `php-xx` layer. Set `bref_major = 3` to switch the account used for runtime layer ARNs. When using v3, `function_layer_arn`, `fpm_layer_arn`, and `console_layer_arn` will all resolve to the same layer ARN. If you use explicit layers with `provided.al2`, set `BREF_RUNTIME` in your Lambda environment (e.g., `fpm`, `function`, or `console`). Override `bref_catalog_url` if you need a newer Bref v3 catalog.
+
 ### PHP Version Values
 The module accepts any PHP version that Bref supports. Common values include:
-- `"80"` - PHP 8.0
-- `"81"` - PHP 8.1
-- `"82"` - PHP 8.2
-- `"83"` - PHP 8.3
-- `"84"` - PHP 8.4 (default)
+- `"80"` or `"8.0"` - PHP 8.0
+- `"81"` or `"8.1"` - PHP 8.1
+- `"82"` or `"8.2"` - PHP 8.2
+- `"83"` or `"8.3"` - PHP 8.3
+- `"84"` or `"8.4"` - PHP 8.4 (default)
+- `"85"` or `"8.5"` - PHP 8.5 (requires `bref_major = 3`)
 - And any future PHP versions that Bref adds support for
 
 ### CPU Type Values
@@ -197,8 +227,9 @@ echo "Running console command\n";
 ## Data Sources
 
 This module uses the HTTP data source to fetch the latest layer versions from:
-- `https://raw.githubusercontent.com/brefphp/bref/master/layers.json`
-- `https://raw.githubusercontent.com/brefphp/extra-php-extensions/master/layers.json`
+- `https://raw.githubusercontent.com/brefphp/bref/refs/tags/2.4.16/layers.json` (v2 runtime catalog)
+- `https://raw.githubusercontent.com/brefphp/bref/refs/tags/3.0.0-beta2/layers.json` (v3 runtime catalog, override via `bref_catalog_url`)
+- `https://raw.githubusercontent.com/brefphp/extra-php-extensions/refs/tags/1.8.6/layers.json` (v2 extensions)
 
 ## Error Handling
 
