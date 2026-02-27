@@ -22,7 +22,7 @@ locals {
   bref_layer_name_prefix = var.bref_layer_name_prefix != null ? var.bref_layer_name_prefix : ""
   bref_catalog_url = var.bref_catalog_url != null ? var.bref_catalog_url : (
     local.bref_major == 3
-    ? "https://raw.githubusercontent.com/brefphp/bref/refs/tags/3.0.0-beta2/layers.json"
+    ? "https://raw.githubusercontent.com/brefphp/bref/refs/tags/3.0.0/layers.json"
     : "https://raw.githubusercontent.com/brefphp/bref/refs/tags/2.4.16/layers.json"
   )
   php_version_normalized = replace(replace(lower(var.php_version), "php-", ""), ".", "")
@@ -32,11 +32,11 @@ locals {
   extension_versions = jsondecode(data.http.bref_extensions.response_body)
 
   # Generate layer keys based on CPU type and PHP version
-  cpu_prefix            = var.cpu_type == "arm64" ? "arm-" : ""
-  runtime_layer_key     = "${local.bref_layer_name_prefix}${local.cpu_prefix}php-${local.php_version_normalized}"
-  function_layer_key    = local.runtime_layer_key
-  fpm_layer_key         = local.bref_major == 3 ? local.runtime_layer_key : "${local.runtime_layer_key}-fpm"
-  console_layer_key     = local.bref_major == 3 ? local.runtime_layer_key : "${local.bref_layer_name_prefix}console"
+  cpu_prefix         = var.cpu_type == "arm64" ? "arm-" : ""
+  runtime_layer_key  = "${local.bref_layer_name_prefix}${local.cpu_prefix}php-${local.php_version_normalized}"
+  function_layer_key = local.runtime_layer_key
+  fpm_layer_key      = local.bref_major == 3 ? local.runtime_layer_key : "${local.runtime_layer_key}-fpm"
+  console_layer_key  = local.bref_major == 3 ? local.runtime_layer_key : "${local.bref_layer_name_prefix}console"
 
   # Get the layer versions for the specified region
   function_layer_version = lookup(lookup(local.layer_versions, local.function_layer_key, {}), var.aws_region, null)
