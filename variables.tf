@@ -38,7 +38,13 @@ variable "bref_layer_name_prefix" {
 }
 
 variable "bref_catalog_url" {
-  description = "Optional override for the Bref runtime catalog URL"
+  description = "Optional override for the Bref runtime catalog URL. Defaults to master branch for v3, tag 2.4.18 for v2"
+  type        = string
+  default     = null
+}
+
+variable "bref_extensions_catalog_url" {
+  description = "Optional override for the Bref extensions catalog URL. Defaults to master branch for v3, tag 1.8.6 for v2"
   type        = string
   default     = null
 }

@@ -129,14 +129,13 @@ module "bref_layers_v3" {
   php_version = "8.5"
   cpu_type    = "arm64"
   aws_region  = "eu-central-1"
+  php_extensions = ["gd", "redis"]
 
-  # Override to pin a newer Bref v3 catalog if needed.
-  # bref_catalog_url = "https://raw.githubusercontent.com/brefphp/bref/3.0.0-beta2/layers.json"
+  # Pin to specific versions to prevent auto-updates
+  # bref_catalog_url = "https://raw.githubusercontent.com/brefphp/bref/refs/tags/3.0.0/layers.json"
+  # bref_extensions_catalog_url = "https://raw.githubusercontent.com/brefphp/extra-php-extensions/refs/tags/3.0.0/layers.json"
 }
 ```
-
-[!WARNING]
-Extra extensions are not yet available for Bref v3
 
 ## Inputs
 
@@ -145,14 +144,17 @@ Extra extensions are not yet available for Bref v3
 | bref_major | Bref major version to target (2 or 3) | `any` | `2` | no |
 | bref_layers_account_id | AWS account ID that publishes the Bref runtime layers | `string` | `null` | no |
 | bref_layer_name_prefix | Optional prefix for Bref runtime layer names | `string` | `null` | no |
-| bref_catalog_url | Optional override for the Bref runtime catalog URL | `string` | `null` | no |
+| bref_catalog_url | Optional override for the Bref runtime catalog URL. Defaults to master branch for v3, tag 2.4.18 for v2 | `string` | `null` | no |
+| bref_extensions_catalog_url | Optional override for the Bref extensions catalog URL. Defaults to master branch for v3, tag 1.8.6 for v2 | `string` | `null` | no |
 | php_version | PHP version for the Bref layers | `string` | `"84"` | no |
 | cpu_type | CPU architecture type (x86 or arm64) | `string` | `"x86"` | no |
 | aws_region | AWS region where the layers will be used | `string` | n/a | yes |
 | php_extensions | List of PHP extensions to include (maximum 9) | `list(string)` | `[]` | no |
 
 ### Bref v2 vs v3
-Bref v3 layers are published from a different AWS account and the runtime layers are merged into a single `php-xx` layer. Set `bref_major = 3` to switch the account used for runtime layer ARNs. When using v3, `function_layer_arn`, `fpm_layer_arn`, and `console_layer_arn` will all resolve to the same layer ARN. If you use explicit layers with `provided.al2`, set `BREF_RUNTIME` in your Lambda environment (e.g., `fpm`, `function`, or `console`). Override `bref_catalog_url` if you need a newer Bref v3 catalog.
+Bref v3 layers are published from a different AWS account and the runtime layers are merged into a single `php-xx` layer. Set `bref_major = 3` to switch the account used for runtime layer ARNs. When using v3, `function_layer_arn`, `fpm_layer_arn`, and `console_layer_arn` will all resolve to the same layer ARN. If you use explicit layers with `provided.al2`, set `BREF_RUNTIME` in your Lambda environment (e.g., `fpm`, `function`, or `console`).
+
+By default, v3 uses the latest layers from the master branch, while v2 uses pinned tags (2.4.18 for runtime, 1.8.6 for extensions). Override `bref_catalog_url` or `bref_extensions_catalog_url` to pin to specific versions.
 
 ### PHP Version Values
 The module accepts any PHP version that Bref supports. Common values include:
@@ -227,9 +229,12 @@ echo "Running console command\n";
 ## Data Sources
 
 This module uses the HTTP data source to fetch the latest layer versions from:
-- `https://raw.githubusercontent.com/brefphp/bref/refs/tags/2.4.16/layers.json` (v2 runtime catalog)
-- `https://raw.githubusercontent.com/brefphp/bref/refs/tags/3.0.0-beta2/layers.json` (v3 runtime catalog, override via `bref_catalog_url`)
-- `https://raw.githubusercontent.com/brefphp/extra-php-extensions/refs/tags/1.8.6/layers.json` (v2 extensions)
+- **Bref v2 runtime**: `https://raw.githubusercontent.com/brefphp/bref/refs/tags/2.4.18/layers.json` (pinned)
+- **Bref v3 runtime**: `https://raw.githubusercontent.com/brefphp/bref/refs/heads/master/layers.json` (latest)
+- **Bref v2 extensions**: `https://raw.githubusercontent.com/brefphp/extra-php-extensions/refs/tags/1.8.6/layers.json` (pinned)
+- **Bref v3 extensions**: `https://raw.githubusercontent.com/brefphp/extra-php-extensions/refs/heads/master/layers.json` (latest)
+
+Override these URLs using `bref_catalog_url` or `bref_extensions_catalog_url` to pin v3 to specific versions or update v2 to newer releases.
 
 ## Error Handling
 

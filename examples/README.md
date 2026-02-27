@@ -16,10 +16,13 @@ Demonstrates usage with PHP extensions:
 - PHP 8.3 with different extensions (calendar, gmp, ldap)
 - Shows how to use combined layer arrays
 
-### [v3-php85/](./v3-php85/)
+### [v3-with-extensions/](./v3-with-extensions/)
 Demonstrates Bref v3 targeting:
-- PHP 8.5 with ARM64 in eu-central-1
+- PHP 8.4 with ARM64 in eu-central-1
 - Shows how to set `bref_major = 3`
+- Includes PHP extensions (gd, redis)
+- Shows how to pin versions to prevent auto-updates
+- Uses master branch by default (auto-updates)
 
 ## Running the Examples
 
