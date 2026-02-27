@@ -9,7 +9,7 @@ module "bref_layers_v3" {
   aws_region  = "eu-central-1"
 
   # Override to pin a newer Bref v3 catalog if needed.
-  # bref_catalog_url = "https://raw.githubusercontent.com/brefphp/bref/3.0.0-beta2/layers.json"
+  # bref_catalog_url = "https://raw.githubusercontent.com/brefphp/bref/refs/tags/3.0.0/layers.json"
 }
 
 output "v3_results" {

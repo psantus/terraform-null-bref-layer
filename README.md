@@ -131,7 +131,7 @@ module "bref_layers_v3" {
   aws_region  = "eu-central-1"
 
   # Override to pin a newer Bref v3 catalog if needed.
-  # bref_catalog_url = "https://raw.githubusercontent.com/brefphp/bref/3.0.0-beta2/layers.json"
+  # bref_catalog_url = "https://raw.githubusercontent.com/brefphp/bref/refs/tags/3.0.0/layers.json"
 }
 ```
 
@@ -228,7 +228,7 @@ echo "Running console command\n";
 
 This module uses the HTTP data source to fetch the latest layer versions from:
 - `https://raw.githubusercontent.com/brefphp/bref/refs/tags/2.4.16/layers.json` (v2 runtime catalog)
-- `https://raw.githubusercontent.com/brefphp/bref/refs/tags/3.0.0-beta2/layers.json` (v3 runtime catalog, override via `bref_catalog_url`)
+- `https://raw.githubusercontent.com/brefphp/bref/refs/tags/3.0.0/layers.json` (v3 runtime catalog, override via `bref_catalog_url`)
 - `https://raw.githubusercontent.com/brefphp/extra-php-extensions/refs/tags/1.8.6/layers.json` (v2 extensions)
 
 ## Error Handling
