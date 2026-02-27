@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0](https://github.com/psantus/terraform-null-bref-layer/releases/tag/v1.2.0) (2026-02-27)
+
+### Fixes
+
+* Switch default Bref v3 runtime catalog from `3.0.0-beta2` to stable `3.0.0`.
+* Update README and v3 example override URL to stable catalog.
+
 ## [1.1.0](https://github.com/psantus/terraform-null-bref-layer/releases/tag/v1.1.0) (2026-01-13)
 
 ### Features
@@ -27,4 +34,3 @@ All notable changes to this project will be documented in this file.
 * *PHP Extensions Support**: Supports up to 9 PHP extensions from Bref's extra extensions
 * *Region Aware**: Automatically detects the current AWS region or accepts a custom region
 * *Combined Layer Arrays**: Provides ready-to-use arrays combining runtime and extension layers
-
