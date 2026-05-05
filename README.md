@@ -222,7 +222,7 @@ echo "Running console command\n";
 
 | Name | Version |
 |------|---------|
-| terraform | >= 1.0 |
+| terraform | >= 1.9.0 |
 | http | >= 3.0 |
 | null | >= 3.0 |
 
